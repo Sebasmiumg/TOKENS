@@ -1,5 +1,13 @@
 import re
 
+print("===============================================")
+print("Nombre: Jose Rossa")
+print("Carnet: 0909-23-8514")
+print("Curso: Compiladores")
+print("Tarea 1")
+print("===============================================\n")
+
+
 KEYWORDS = {"if", "let"}
 TYPES = {"int"}
 
@@ -68,19 +76,16 @@ def print_list(tokens):
 
 def ejercicio_1():
     code = "let x:int = 25;"
-    print("==================================================")
     print("EJERCICIO 1")
     print("Entrada:", code)
-    toks = tokenize(code)
     print("\n1) Liste todos los tokens en orden:")
-    print_list(toks)
-    print("\n2) Indique el tipo de cada token: (ya va en la misma lista)")
-    print("==================================================\n")
+    print_list(tokenize(code))
+    print("\n2) Indique el tipo de cada token: (ya aparece en la lista)")
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_2():
     code = "if iffy let letter"
-    print("==================================================")
     print("EJERCICIO 2")
     print("Entrada:", code)
 
@@ -92,10 +97,11 @@ def ejercicio_2():
 
     print("\n2) Justifique brevemente cada decisión:")
     print("- if -> KEYWORD porque es palabra reservada.")
-    print("- iffy -> ID porque no es exactamente 'if', solo se parece.")
+    print("- iffy -> ID porque no es exactamente 'if'.")
     print("- let -> KEYWORD porque es palabra reservada.")
     print("- letter -> ID porque no es palabra reservada.")
-    print("==================================================\n")
+
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_3():
@@ -107,59 +113,51 @@ def ejercicio_3():
     ops = [lex for (lex, kind, *_ ) in toks if kind.endswith("_OP")]
     syms = [lex for (lex, kind, *_ ) in toks if kind in ("COLON", "LPAREN", "RPAREN", "SEMICOLON")]
 
-    print("==================================================")
     print("EJERCICIO 3")
     print("Entrada:", code)
 
-    print("\nIdentifique identificadores, literales, operadores y símbolos:")
-    print("Identificadores:", ", ".join(ids) if ids else "—")
-    print("Literales:", ", ".join(lits) if lits else "—")
-    print("Operadores:", ", ".join(ops) if ops else "—")
-    print("Símbolos:", ", ".join(syms) if syms else "—")
+    print("\nIdentificadores:", ", ".join(ids))
+    print("Literales:", ", ".join(lits))
+    print("Operadores:", ", ".join(ops))
+    print("Símbolos:", ", ".join(syms))
+    print("(No interpreto significado, solo clasifico tipos de token.)")
 
-    print("\n(No interpreto significado, solo digo qué tipo de token es cada cosa.)")
-    print("==================================================\n")
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_4():
     code = "x==y"
-    toks = tokenize(code)
-
-    print("==================================================")
     print("EJERCICIO 4")
     print("Entrada:", code)
 
     print("\n1) Liste los tokens correctos:")
-    print_list(toks)
+    print_list(tokenize(code))
 
-    print("\n2) Explique qué error cometería un lexer mal diseñado:")
-    print("Un lexer mal hecho podría partir '==' en '=' y '=' como si fueran dos tokens separados.")
-    print("Entonces saldría algo como: x, =, =, y (y eso está mal).")
+    print("\n2) Error de un lexer mal diseñado:")
+    print("Podría dividir '==' en '=' y '=' como dos tokens separados.")
 
-    print("\n3) Explique cómo la regla maximal munch evita ese error:")
-    print("Maximal munch es básicamente: 'agarra el token más largo que puedas'.")
-    print("Como '==' existe, el lexer lo toma completo y no lo divide en dos '='.")
-    print("==================================================\n")
+    print("\n3) Cómo la regla maximal munch evita ese error:")
+    print("El lexer toma el token más largo posible, entonces reconoce '==' completo.")
+
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_5():
     code = "let\nx\n=\n10\n;\n"
-    toks = tokenize(code)
-
-    print("==================================================")
     print("EJERCICIO 5")
     print("Entrada:")
     print(code)
 
     print("1) Liste los tokens generados:")
-    print_list(toks)
+    print_list(tokenize(code))
 
-    print("\n2) Explique por qué los saltos de línea no generan tokens:")
-    print("Porque el lexer los trata como espacios (whitespace). Sirven para separar, pero no son tokens.")
+    print("\n2) Por qué los saltos de línea no generan tokens:")
+    print("Porque el lexer los trata como espacios en blanco (whitespace).")
 
-    print("\n3) Indique qué información sí debe conservar el lexer:")
-    print("La línea y columna de cada token, para poder decir exactamente dónde hay errores.")
-    print("==================================================\n")
+    print("\n3) Qué información sí debe conservar el lexer:")
+    print("Debe guardar línea y columna para reportar errores.")
+
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_6():
@@ -168,46 +166,43 @@ def ejercicio_6():
 
     comp_ops = [lex for (lex, _kind, *_ ) in toks if lex in ("<=", "&&", "!=", "==")]
 
-    print("==================================================")
     print("EJERCICIO 6")
     print("Entrada:", code)
 
     print("\nListe los tokens en orden:")
     print_list(toks)
 
-    print("\nIdentifique todos los operadores compuestos:")
-    print(", ".join(comp_ops) if comp_ops else "—")
+    print("\nOperadores compuestos encontrados:")
+    print(", ".join(comp_ops))
 
-    print("\nExplique por qué && no se tokeniza como dos &:")
-    print("Porque '&&' es un operador completo y es más largo.")
-    print("Con maximal munch el lexer prefiere '&&' en vez de '&' + '&'.")
-    print("==================================================\n")
+    print("\nPor qué && no se tokeniza como dos &:")
+    print("Porque '&&' es un operador completo y es más largo,")
+    print("y el lexer siempre toma el token más largo posible.")
+
+    print("\n-----------------------------------------------\n")
 
 
 def ejercicio_7():
     code = "let x:int = 10 $ 5;"
-    print("==================================================")
     print("EJERCICIO 7")
     print("Entrada:", code)
 
     print("\nIdentifique el error léxico:")
-    print("El símbolo '$' no está definido como token válido en este lenguaje, entonces es error.")
+    print("El símbolo '$' no está definido como token válido.")
 
     print("\nIndique en qué token ocurre:")
-    print("Ocurre justo cuando el lexer encuentra '$'.")
+    print("Ocurre cuando el lexer encuentra '$'.")
 
-    print("\nMensaje de error que debería producir el lexer (con línea y columna):")
+    print("\nMensaje de error que debería producir el lexer:")
     try:
         tokenize(code)
-        print("No debería llegar aquí.")
     except SyntaxError as e:
         print(e)
 
-    print("==================================================\n")
+    print("\n-----------------------------------------------\n")
 
 
 def main():
-    print("TAREA DE COMPILADORES (ANÁLISIS LÉXICO EN PYTHON)\n")
     ejercicio_1()
     ejercicio_2()
     ejercicio_3()
